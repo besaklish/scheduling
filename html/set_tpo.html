@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!-- 
+  会う日時と場所などの条件を設定する
+  ラジオボタンで分かりやすく
+ -->
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>日時と場所の設定</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.min.css'
+    integrity='sha256-cnxgu1WK4uhR5pOw/YhkL1qdoVWMPceoQvv0AcIRkF0=' crossorigin='anonymous' />
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Noto+Sans+JP:400,700" rel="stylesheet">
+  <style>
+    html {
+      font-family: 'Lato', 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', 'ＭＳ Ｐゴシック', sans-serif;
+    }
+
+    .checkbox-group {
+      display: flex;
+      justify-content: space-around;
+      flex-grow: 1;
+    }
+
+    .checkbox-item {
+      position: relative;
+      flex: 1;
+      border: 1px solid gray;
+      border-radius: 3px;
+    }
+
+    .checkbox-item>input {
+      width: 100%;
+      height: 50px;
+      opacity: 0;
+    }
+
+    .checkbox-item>label {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .checkbox-item>input:checked+label {
+      background-color: coral;
+      text-emphasis-style: filled sesame;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Vueで遊ぶ -->
+  <div id="app">
+    <p>{{message}} Your id is {{id + 1}}</p>
+  </div>
+
+  <!-- 本文 -->
+  <div class='uk-container uk-container-center uk-margin-top uk-margin-large-bottom'>
+    <header>
+
+    </header>
+    <main>
+      <form action="#">
+        <h3>曜日を選んでください</h3>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="mon" value="mon">
+            <label for="mon">月</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="tue" value="tue">
+            <label for="tue">火</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="wed" value="wed">
+            <label for="wed">水</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="thu" value="thu">
+            <label for="thu">木</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="fri" value="fri">
+            <label for="fri">金</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="sat" value="sat">
+            <label for="sat">土</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="week" id="sun" value="sun">
+            <label for="sun">日</label>
+          </div>
+        </div>
+
+        <h3>時間帯を選んでください</h3>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" name="period" id="morning" value="morning">
+            <label for="morning">朝</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="period" id="day" value="day">
+            <label for="day">昼</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" name="period" id="night" value="night">
+            <label for="night">夜</label>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    var vm = new Vue({
+      el: "#app",
+      data:{
+        message: "Hey girl!",
+        id: 5
+      }
+    })
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/js/uikit.min.js'
+    integrity='sha256-AINUlF7RFhEIU37MsMWXfqC9AlpDnmW8xp1NUfEa8io=' crossorigin='anonymous'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/js/uikit-icons.min.js'
+    integrity='sha256-T3+0YjpPZWQR6G5L8KOHWj/T6gGfMj1CPHDYDp0z3eE=' crossorigin='anonymous'></script>
+</body>
+
+</html>
