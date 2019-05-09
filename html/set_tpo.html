@@ -55,78 +55,165 @@
 </head>
 
 <body>
-  <!-- Vueで遊ぶ -->
-  <div id="app">
-    <p>{{message}} Your id is {{id + 1}}</p>
-  </div>
-
-  <!-- 本文 -->
   <div class='uk-container uk-container-center uk-margin-top uk-margin-large-bottom'>
     <header>
 
     </header>
-    <main>
+    <main id="app">
       <form action="#">
         <h3>曜日を選んでください</h3>
         <div class="checkbox-group">
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="mon" value="mon">
-            <label for="mon">月</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="tue" value="tue">
-            <label for="tue">火</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="wed" value="wed">
-            <label for="wed">水</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="thu" value="thu">
-            <label for="thu">木</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="fri" value="fri">
-            <label for="fri">金</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="sat" value="sat">
-            <label for="sat">土</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="week" id="sun" value="sun">
-            <label for="sun">日</label>
-          </div>
+          <checkbox-item v-for="date in dates" :key="date.name" :checkbox_props="date" name="date"
+            @input="handleCheckbox">
+          </checkbox-item>
         </div>
 
         <h3>時間帯を選んでください</h3>
         <div class="checkbox-group">
-          <div class="checkbox-item">
-            <input type="checkbox" name="period" id="morning" value="morning">
-            <label for="morning">朝</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="period" id="day" value="day">
-            <label for="day">昼</label>
-          </div>
-          <div class="checkbox-item">
-            <input type="checkbox" name="period" id="night" value="night">
-            <label for="night">夜</label>
-          </div>
+          <checkbox-item v-for="period in periods" :key="period.name" :checkbox_props="period" name="period"
+            @input="handleCheckbox">
+          </checkbox-item>
+        </div>
+
+        <h3>時間を選んでください</h3>
+        <div class="checkbox-group">
+          <checkbox-item v-show="selected_periods.includes('morning')" v-for="hour_morning in hours_morning" :key="hour_morning.name" :checkbox_props="hour_morning"
+            name="hour" @input="handleCheckbox">
+          </checkbox-item>
+        </div>
+        <div class="checkbox-group">
+          <checkbox-item v-show="selected_periods.includes('day')"  v-for="hour_day in hours_day" :key="hour_day.name" :checkbox_props="hour_day" name="hour"
+            @input="handleCheckbox">
+          </checkbox-item>
+        </div>
+        <div class="checkbox-group">
+          <checkbox-item v-show="selected_periods.includes('night')" v-for="hour_night in hours_night" :key="hour_night.name" :checkbox_props="hour_night"
+            name="hour" @input="handleCheckbox">
+          </checkbox-item>
         </div>
       </form>
+      <div>
+        <p>
+          The selected_dates are: <span>{{ selected_dates }}</span>
+        </p>
+        <p>
+          The selected_periods are: <span>{{ selected_periods }}</span>
+        </p>
+        <p>
+          The selected_hours are: <span>{{ selected_hours }}</span>
+        </p>
+      </div>
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
 
   <script>
+    Vue.component('checkbox-item', {
+      props: ['checkbox_props', 'name'],
+      template: "\
+        <div class='checkbox-item'>\
+          <input\
+            type='checkbox'\
+            :name='name'\
+            :value='checkbox_props.value'\
+            :id='checkbox_props.value'\
+            @click='$emit(\"input\", checkbox_props.value, $event.target.checked, name)' />\
+          <label :for='checkbox_props.value'>{{ checkbox_props.name }}</label>\
+        </div>"
+    })
+
+    let dates = [
+      {
+        name: "月",
+        value: "mon"
+      },
+      {
+        name: "火",
+        value: "tue"
+      },
+      {
+        name: "水",
+        value: "wed"
+      },
+      {
+        name: "木",
+        value: "thu"
+      },
+      {
+        name: "金",
+        value: "fri"
+      },
+      {
+        name: "土",
+        value: "sat"
+      },
+      {
+        name: "日",
+        value: "sun"
+      }
+    ]
+
+    let periods = [
+      {
+        name: "朝",
+        value: "morning"
+      },
+      {
+        name: "昼",
+        value: "day"
+      },
+      {
+        name: "夜",
+        value: "night"
+      }
+    ]
+
+    let hours = []
+    for (let i = 0; i < 24; i++) {
+      hours.push({
+        name: i,
+        value: i
+      })
+    }
+
+    let hours_morning = hours.slice(6, 12);
+    let hours_day = hours.slice(12, 18);
+    let hours_night = hours.slice(18);
+
     var vm = new Vue({
       el: "#app",
-      data:{
-        message: "Hey girl!",
-        id: 5
+      data: {
+        dates: dates,
+        periods: periods,
+        hours: hours,
+        hours_morning: hours_morning,
+        hours_day: hours_day,
+        hours_night: hours_night,
+        selected_dates: [],
+        selected_periods: [],
+        selected_hours: [],
+      },
+      methods: {
+        handleCheckbox: function (inputValue, checked, name) {
+          // 引数としてcomponentのpropsの1つであるnameを渡せば、複数のCheckboxに対応できる。
+          let name_obj = {
+            date: this.selected_dates,
+            period: this.selected_periods,
+            hour: this.selected_hours
+          }
+
+          let targetArray = name_obj[name]
+          if (checked) {
+            targetArray.push(inputValue);
+          }
+          else {
+            targetArray.splice(targetArray.indexOf(inputValue), 1);
+          }
+        }
       }
     })
+
+
   </script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/js/uikit.min.js'
     integrity='sha256-AINUlF7RFhEIU37MsMWXfqC9AlpDnmW8xp1NUfEa8io=' crossorigin='anonymous'></script>
